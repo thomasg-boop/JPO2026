@@ -36,15 +36,20 @@
 
 <a-scene box-spread="" keyboard-shortcuts="" screenshot="" xr-mode-ui="" device-orientation-permission-ui="">
 
-  <a-video id="video" src="./Epic-BTS3.mp4"
+  <!-- VIDEO FIX MOBILE -->
+  <a-video id="video"
+           src="./Epic-BTS3.mp4"
            position="0 2.54164 -0.37576"
            scale="5 5 5"
-           autoplay="true"
-           loop="true">
+           autoplay="false"
+           loop="true"
+           muted="true"
+           playsinline="true">
   </a-video>
 
   <a-entity rotation="0 180 0">
 
+    <!-- LUMIÈRES -->
     <a-entity id="ambientLight"
               light="color: rgb(255,255,255); intensity: 0.6; type: ambient">
     </a-entity>
@@ -54,6 +59,7 @@
               position="1 3 2">
     </a-entity>
 
+    <!-- CAISSES -->
     <a-entity id="boxL">
       <a-gltf-model src="./scene.glb" scale="0.61647 0.59806 1"></a-gltf-model>
       <a-box position="0 0.25 0" width="0.6" height="0.5" depth="0.6" visible="false"></a-box>
@@ -66,6 +72,7 @@
       <a-box id="footR" position="0 0.55 0" width="0.3" height="0.1" depth="0.4" visible="false"></a-box>
     </a-entity>
 
+    <!-- PANTIN -->
     <a-entity id="pantin" pantin="">
       <a-entity id="pelvis" material="color: #000000"></a-entity>
 
@@ -142,9 +149,9 @@
     </a-gltf-model>
   </a-entity>
 
-  <!-- BOUTON 3D -->
+  <!-- BOUTON 3D (légèrement plus petit) -->
   <a-entity id="epicButton"
-            geometry="primitive: box; width: 1.2; height: 0.4; depth: 0.2"
+            geometry="primitive: box; width: 1.05; height: 0.35; depth: 0.18"
             material="color: #E10600"
             position="0 1.2 3"
             class="clickable">
@@ -152,8 +159,8 @@
     <a-text value="EPIC SPLIT"
             align="center"
             color="white"
-            position="0 0 0.11"
-            width="2">
+            position="0 0 0.10"
+            width="1.8">
     </a-text>
   </a-entity>
 
@@ -175,11 +182,14 @@ const maxSpread = 2 * legLength;
 let spread = 1.2;
 let spreading = false;
 
+/* VIDEO START FIX */
 document.getElementById("startBtn").addEventListener("click", () => {
-  document.getElementById("video").play();
+  const video = document.getElementById("video");
+  video.components.material.material.map.image.play();
   document.getElementById("startOverlay").style.display = "none";
 });
 
+/* BOX SPREAD */
 AFRAME.registerComponent("box-spread", {
   tick() {
     const speed = 0.02;
@@ -197,6 +207,7 @@ AFRAME.registerComponent("box-spread", {
   }
 });
 
+/* PANTIN */
 AFRAME.registerComponent("pantin", {
   tick() {
     const footL = footL_el.object3D.getWorldPosition(new THREE.Vector3());
@@ -236,7 +247,7 @@ function connectLeg(id, foot) {
   leg.rotateX(Math.PI/2);
 }
 
-/* ACTIVATION PAR LE VISEUR */
+/* ACTIVATION PAR VISEUR */
 const epicButton = document.getElementById("epicButton");
 
 epicButton.addEventListener("mouseenter", () => {
